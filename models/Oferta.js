@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const OfertaSchema = new mongoose.Schema({
   producto: { type: String, required: true },
+  marca: { type: String, default: "" }, // <--- CAMPO NUEVO
   precioNuevo: { type: Number, required: true },
   precioViejo: { type: Number, required: true },
   stock: { type: Number, required: true },

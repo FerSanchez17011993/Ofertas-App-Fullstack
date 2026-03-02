@@ -27,7 +27,7 @@ router.get('/local/:localId', async (req, res) => {
     }
 });
 
-// 3. CARGA MASIVA / SINCRONIZACIÓN (Guardar Cambios)
+// 3. CARGA MASIVA / SINCRONIZACIÓN (Guardar Cambios con Marca)
 router.post('/bulk', async (req, res) => {
     try {
         const { productos, localId } = req.body;
@@ -41,16 +41,20 @@ router.post('/bulk', async (req, res) => {
             .filter(p => p.producto && p.producto.trim() !== "") 
             .map(p => ({ 
                 producto: p.producto,
+                marca: p.marca || "", // <--- CAPTURA DE MARCA
                 precioNuevo: Number(p.precioNuevo) || 0,
                 precioViejo: Number(p.precioViejo) || Number(p.precioNuevo) || 0,
                 stock: Number(p.stock) || 0,
                 categoria: p.categoria || 'Almacén',
                 publicId: p.publicId || null,
-                local: localId
+                local: localId,
+                publicado: true,
+                fechaInicioOferta: p.fechaInicioOferta,
+                fechaFinOferta: p.fechaFinOferta
             }));
 
         const resultados = await Oferta.insertMany(ofertasFinales);
-        res.status(201).json({ mensaje: `Sincronizados ${resultados.length} productos` });
+        res.status(201).json({ mensaje: `Sincronizados ${resultados.length} productos con marcas` });
     } catch (error) {
         console.error("Error en bulk upload:", error);
         res.status(500).json({ error: error.message });
