@@ -2,11 +2,18 @@ const mongoose = require('mongoose');
 
 const OfertaSchema = new mongoose.Schema({
   producto: { type: String, required: true },
-  marca: { type: String, default: "" }, // <--- CAMPO NUEVO
+  marca: { type: String, default: "" }, 
   precioNuevo: { type: Number, required: true },
   precioViejo: { type: Number, required: true },
   stock: { type: Number, required: true },
-  peso: { type: Number, default: 0 },
+  
+  contenido: { type: Number, default: 0 }, 
+  unidad: { 
+    type: String, 
+    enum: ['g', 'kg', 'l', 'ml', 'u'], 
+    default: 'u' 
+  },
+
   limitePorCliente: { type: Number, default: 3 },
   fechaVencimiento: { type: Date }, 
   publicId: { type: String, required: false },
